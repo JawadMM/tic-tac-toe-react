@@ -1,26 +1,42 @@
 import React from "react";
 import { useState } from "react";
 
-const Player = ({ name, symbol }) => {
+const Player = ({ initialName, symbol }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [playerName, setPlayerName] = useState(initialName);
 
-  function editingHandler() {
-    setIsEditing(!isEditing);
+  function handleEditClick() {
+    setIsEditing((editing) => !editing); //function form to make sure React gets the latest state
   }
 
-  let playerName =<span className="player-name">{name}</span>;
+  function handleChange(event) {
+    //console.log(event);
+    const name = event.target.value;
+    setPlayerName(name);
+  }
+
+  let playerNameContainer = <span className="player-name">{playerName}</span>; // Two way binding: getting a value out of an input and feeding it back to it
+  let buttonCaption = "edit";
 
   if (isEditing) {
-    playerName = <input type="text" required></input>
+    playerNameContainer = (
+      <input
+        type="text"
+        required
+        value={playerName}
+        onChange={handleChange}
+      ></input>
+    );
+    buttonCaption = "Save";
   }
 
   return (
     <li>
       <span className="player">
-        {playerName}
+        {playerNameContainer}
         <span className="player-symbol">{symbol}</span>
       </span>
-      <button onClick={editingHandler}>Edit</button>
+      <button onClick={handleEditClick}>{buttonCaption}</button>
     </li>
   );
 };
